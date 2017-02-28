@@ -4,7 +4,18 @@
   "description": "Find subgraph isomorphisms with Ullman's 1976 algorithm.",
   "main": "lib/index.js",
   "scripts": {
-    "test": "mocha"
+    "flow": "flow",
+    "build:clean": "rimraf lib",
+    "build:lib": "babel -d lib/ src/",
+    "build:flow": "flow-copy-source -v src lib",
+    "build": "npm run build:clean && npm run build:lib && npm run build:flow",
+    "test:mocha": "mocha",
+    "test": "npm run build && npm run test:mocha",
+    "prepublish": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bwestergard/isomorphism.git"
   },
   "keywords": [
     "graph",
@@ -22,7 +33,10 @@
     "babel-plugin-transform-flow-strip-types": "^6.18.0",
     "babel-preset-es2015": "^6.18.0",
     "flow-bin": "^0.30.0",
-    "mocha": "^3.2.0"
+    "flow-copy-source": "^1.1.0",
+    "mocha": "^3.2.0",
+    "rimraf": "^2.5.4",
+    "standard": "^8.6.0"
   },
   "author": "Bjorn Westergard",
   "license": "MIT"
