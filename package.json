@@ -1,0 +1,18 @@
+{
+  "name": "isomorphism",
+  "version": "0.0.1",
+  "description": "Find subgraph isomorphisms with Ullman's 1976 algorithm.",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "graph",
+    "subgraph",
+    "isomorphism",
+    "matching",
+    "ullman"
+  ],
+  "author": "Bjorn Westergard",
+  "license": "MIT"
+}
