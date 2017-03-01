@@ -4,13 +4,17 @@ import { map, all, any, filter, reduce, concat } from 'ramda'
 
 /* Types */
 
-type RowVector = number[]
+type Indexical = number
+type Weight = number
+type WeightedEdge = [Indexical, Weight]
 
-type Matrix = RowVector[]
+type RowVector<T> = T[]
+type Matrix<T> = RowVector<T>[]
 
-export type DiGraph = Matrix
-export type Mapping = Matrix
-export type Isomorphism = number[]
+export type DiGraph = Matrix<Indexical>
+export type WeightedDiGraph = Matrix<WeightedEdge>
+export type Mapping = Matrix<Indexical>
+export type Isomorphism = Indexical[]
 
 /* Utility */
 
@@ -188,7 +192,7 @@ const allMappings = (
   return mapping
 }
 
-export const allIsomorphisms = (
+export const allIsomorphismsForDigraphs = (
   pattern: DiGraph,
   target: DiGraph,
   initialpossibleMappings: ?Mapping

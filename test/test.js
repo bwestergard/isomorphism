@@ -3,7 +3,7 @@
 
 import { clone } from 'ramda'
 import assert from 'assert'
-import { allIsomorphisms } from '../lib/index'
+import { allIsomorphismsForDigraphs } from '../lib/index'
 
 declare class describe {
   static (description: string, spec: () => void): void;
@@ -19,7 +19,7 @@ describe('Isomorphism', function () {
 
   it('a -> b has only one isomorphism to a -> b', function () {
     assert.deepEqual(
-      allIsomorphisms(
+      allIsomorphismsForDigraphs(
         [
           [1],
           []
@@ -38,7 +38,7 @@ describe('Isomorphism', function () {
 
   it('Three-cycle isomorphic to every cycle', function () {
     assert.deepEqual(
-      allIsomorphisms(
+      allIsomorphismsForDigraphs(
         [
           [1],
           [2],
@@ -61,7 +61,7 @@ describe('Isomorphism', function () {
 
   it('Isomorphisms for three-chain pattern on ten-chain', function () {
     assert.deepEqual(
-      allIsomorphisms(
+      allIsomorphismsForDigraphs(
         [
           [1],
           [2],
@@ -96,7 +96,7 @@ describe('Isomorphism', function () {
 
   it('Isomorphisms for three-chain pattern on ten-cycle', function () {
     assert.deepEqual(
-      allIsomorphisms(
+      allIsomorphismsForDigraphs(
         [
           [1],
           [2],
@@ -135,7 +135,7 @@ describe('Isomorphism', function () {
 
   it('Pattern larger than graph produces no isomorphisms', function () {
     assert.deepEqual(
-      allIsomorphisms(
+      allIsomorphismsForDigraphs(
         [
           [1],
           [2],
@@ -162,7 +162,7 @@ describe('Isomorphism', function () {
 	// http://mathworld.wolfram.com/HajosGraph.html
   it('Three-cycle has twelve isomorpisms to a certain directed Hajos graph', function () {
     assert.deepEqual(
-      allIsomorphisms(
+      allIsomorphismsForDigraphs(
         [
           [1],
           [2],
