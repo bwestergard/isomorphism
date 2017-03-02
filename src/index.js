@@ -37,6 +37,16 @@ const isAdjacent = (
   return false
 }
 
+const getIndex = ([index, weight]: WeightedEdge): number => index
+const weightOneEdge = (index: number): WeightedEdge => [index, 1]
+const digraphToWeighted = (graph: DiGraph): WeightedDiGraph => map(
+  (neighbors) => map(
+    (neighborIndex) => weightOneEdge(neighborIndex),
+    neighbors
+  ),
+  graph
+)
+
 // What is the degree of `vertex` in `graph`?
 const deg = (
   graph: DiGraph,
@@ -100,7 +110,7 @@ const setMappingInPossibleMappings = (
 
 const refine = (
   mapping: Mapping,
-  predicate: (x: number, possibleTarget: number) => boolean
+  predicate: (patternVertex: number, possibleTargetVertex: number) => boolean
 ): Mapping | null => {
   let refinedMapping: Mapping = []
   for (let patternVertex = 0; patternVertex < mapping.length; patternVertex++) {
