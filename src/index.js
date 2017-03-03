@@ -23,20 +23,6 @@ reduce(concat, [], map(fn, xs))
 
 /* Adjacency list graph representation */
 
-// In the directed graph `graph`, does `vertex` have an edge to `neighbor`?
-const isAdjacent = (
-  graph: DiGraph,
-  vertex: number,
-  neighbor: number
-): boolean =>
-{
-  for (let i = 0; i <= graph[vertex].length; i++) {
-    if (graph[vertex][i] > neighbor) return false // NOTE: adjacency list must be sorted ascending
-    if (graph[vertex][i] === neighbor) return true
-  }
-  return false
-}
-
 const getIndex = ([index, weight]: WeightedEdge): number => index
 const weightOneEdge = (index: number): WeightedEdge => [index, 1]
 const digraphToWeighted = (graph: DiGraph): WeightedDiGraph => map(
@@ -47,11 +33,26 @@ const digraphToWeighted = (graph: DiGraph): WeightedDiGraph => map(
   graph
 )
 
+// In the directed graph `graph`, does `vertex` have an edge to `neighbor`?
+const isAdjacent = <T>(
+  graph: Matrix<T>,
+  accessIndex: (x: T) => number,
+  vertex: number,
+  neighbor: number
+): boolean =>
+{
+  for (let i = 0; i < graph[vertex].length; i++) {
+    if (accessIndex(graph[vertex][i]) > neighbor) return false // NOTE: adjacency list must be sorted ascending
+    if (accessIndex(graph[vertex][i]) === neighbor) return true
+  }
+  return false
+}
+
 /* Ullman */
 
 export const extractAtMostOneIsomorphism = (
-  pattern: DiGraph,
-  target: DiGraph,
+  pattern:WeightedDiGraph,
+  target: WeightedDiGraph,
   mapping: Mapping
 ): Isomorphism[] => {
   const mappedTargetVertex = (patternVertex: number): number | null =>
@@ -66,12 +67,13 @@ export const extractAtMostOneIsomorphism = (
     if (targetVertexForPatternVertex === null) return []
     let patternVector = pattern[patternVertex]
     for (let j = 0; j < patternVector.length; j++) {
-      let patternNeighbor = patternVector[j]
+      let [patternNeighbor, patternNeighborEdgeWeight] = patternVector[j]
       let maybeTarget = mappedTargetVertex(patternNeighbor)
       if (
         maybeTarget === null ||
         !isAdjacent(
           target,
+          getIndex,
           targetVertexForPatternVertex,
           maybeTarget
         )
@@ -143,15 +145,15 @@ const degreeRefine = (
 }
 
 const ullmanRefine = (
-  pattern: DiGraph,
-  target: DiGraph,
+  pattern: WeightedDiGraph,
+  target: WeightedDiGraph,
   mapping: Mapping
 ): Mapping | null =>
 refine(
   mapping,
   (patternVertex: number, targetVertex: number): boolean => all(
-    (patternVertexNeighbor) => any(
-      (targetVertexNeighbor) => isAdjacent(mapping, patternVertexNeighbor, targetVertexNeighbor),
+    ([patternVertexNeighbor, patternVertexNeighborWeight]) => any(
+      ([targetVertexNeighbor, targetVertexNeighborWeight]) => isAdjacent(mapping, (x) => x, patternVertexNeighbor, targetVertexNeighbor),
       target[targetVertex]
     ),
     pattern[patternVertex]
@@ -159,8 +161,8 @@ refine(
 )
 
 const search = (
-  pattern: DiGraph,
-  target: DiGraph,
+  pattern: WeightedDiGraph,
+  target: WeightedDiGraph,
   possibleMappings: Mapping,
   scanVertex: number
 ): Isomorphism[] =>
@@ -221,8 +223,8 @@ export const allIsomorphismsForDigraphs = (
     : pattern.length > target.length
       ? []
       : search(
-        pattern,
-        target,
+        weightedPattern,
+        weightedTarget,
         maybeRefined,
         0
       )
