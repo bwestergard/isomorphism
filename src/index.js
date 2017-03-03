@@ -207,6 +207,9 @@ export const allIsomorphismsForDigraphs = (
   target: DiGraph,
   initialpossibleMappings: ?Mapping
 ): Isomorphism[] => {
+  const weightedPattern = digraphToWeighted(pattern)
+  const weightedTarget = digraphToWeighted(target)
+  
   const maybeRefined = degreeRefine(
     pattern,
     target,
