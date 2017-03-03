@@ -47,12 +47,6 @@ const digraphToWeighted = (graph: DiGraph): WeightedDiGraph => map(
   graph
 )
 
-// What is the degree of `vertex` in `graph`?
-const deg = (
-  graph: DiGraph,
-  vertex: number
-) => graph[vertex].length
-
 /* Ullman */
 
 export const extractAtMostOneIsomorphism = (
@@ -131,15 +125,22 @@ const refine = (
 }
 
 const degreeRefine = (
-  pattern: DiGraph,
-  target: DiGraph,
+  pattern: WeightedDiGraph,
+  target: WeightedDiGraph,
   mapping: Mapping
-): Mapping | null =>
-refine(
-  mapping,
-  (patternVertex: number, targetVertex: number) =>
-  deg(pattern, patternVertex) <= deg(target, targetVertex)
-)
+): Mapping | null => {
+  // What is the degree of `vertex` in `graph`?
+  const deg = (
+    graph: WeightedDiGraph,
+    vertex: number
+  ) => graph[vertex].length
+
+  return refine(
+    mapping,
+    (patternVertex: number, targetVertex: number) =>
+    deg(pattern, patternVertex) <= deg(target, targetVertex)
+  )
+}
 
 const ullmanRefine = (
   pattern: DiGraph,
@@ -209,10 +210,10 @@ export const allIsomorphismsForDigraphs = (
 ): Isomorphism[] => {
   const weightedPattern = digraphToWeighted(pattern)
   const weightedTarget = digraphToWeighted(target)
-  
+
   const maybeRefined = degreeRefine(
-    pattern,
-    target,
+    weightedPattern,
+    weightedTarget,
     initialpossibleMappings || allMappings(pattern.length, target.length)
   )
   return !maybeRefined
