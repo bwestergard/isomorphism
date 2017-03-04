@@ -157,16 +157,14 @@ refine(
   mapping,
   (patternVertex: number, targetVertex: number): boolean => all(
     ([patternVertexNeighbor, patternNeighborEdgeWeight]) => any(
-      ([targetVertexNeighbor, targetNeighborEdgeWeight]) => {
-        console.log(patternNeighborEdgeWeight <= targetNeighborEdgeWeight)
-        return isAdjacent(
+      ([targetVertexNeighbor, targetNeighborEdgeWeight]) =>
+        isAdjacent(
           mapping,
           (x) => x,
           (edge, neighborIndex) => edge === neighborIndex,
           patternVertexNeighbor,
           targetVertexNeighbor
-        ) && patternNeighborEdgeWeight <= targetNeighborEdgeWeight
-      },
+        ) && patternNeighborEdgeWeight <= targetNeighborEdgeWeight,
       target[targetVertex]
     ),
     pattern[patternVertex]
