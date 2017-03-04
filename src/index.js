@@ -156,14 +156,14 @@ const ullmanRefine = (
 refine(
   mapping,
   (patternVertex: number, targetVertex: number): boolean => all(
-    ([patternVertexNeighbor, patternVertexNeighborWeight]) => any(
-      ([targetVertexNeighbor, targetVertexNeighborWeight]) => isAdjacent(
+    ([patternVertexNeighbor, patternNeighborEdgeWeight]) => any(
+      ([targetVertexNeighbor, targetNeighborEdgeWeight]) => isAdjacent(
         mapping,
         (x) => x,
         (edge, neighborIndex) => edge === neighborIndex,
         patternVertexNeighbor,
         targetVertexNeighbor
-      ),
+      ) && patternNeighborEdgeWeight <= targetNeighborEdgeWeight,
       target[targetVertex]
     ),
     pattern[patternVertex]
