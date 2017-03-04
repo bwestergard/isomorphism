@@ -3,7 +3,7 @@
 
 import { clone } from 'ramda'
 import assert from 'assert'
-import { allIsomorphismsForDigraphs } from '../src/index'
+import { allIsomorphismsForDigraphs, allIsomorphismsForWeightedDigraphs } from '../lib/index'
 
 declare class describe {
   static (description: string, spec: () => void): void;
@@ -15,7 +15,35 @@ declare class it {
 
 // TODO test for every error type
 
-describe('Isomorphism', function () {
+describe('Weighted', function () {
+
+  it('Three-cycle with one two-weighted edge has one isomorpism to a certain directed Hajos graph', function () {
+    assert.deepEqual(
+      allIsomorphismsForWeightedDigraphs(
+        [
+          [[1,200]],
+          [[2,1]],
+          [[0,1]]
+        ],
+        [
+          [[1,800]],
+          [[2,1],[3,1]],
+          [[0,1],[4,1]],
+          [[4,1]],
+          [[1,1],[5,1]],
+          [[2,1]]
+        ],
+        null
+      ),
+      [
+        [0,1,2]
+      ]
+    )
+  })
+
+})
+
+describe('Unweighted', function () {
 
   it('a -> b has only one isomorphism to a -> b', function () {
     assert.deepEqual(

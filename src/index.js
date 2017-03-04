@@ -215,6 +215,29 @@ const allMappings = (
   return mapping
 }
 
+export const allIsomorphismsForWeightedDigraphs = (
+  pattern: WeightedDiGraph,
+  target: WeightedDiGraph,
+  initialpossibleMappings: ?Mapping
+): Isomorphism[] => {
+
+  const maybeRefined = degreeRefine(
+    pattern,
+    target,
+    initialpossibleMappings || allMappings(pattern.length, target.length)
+  )
+  return !maybeRefined
+    ? []
+    : pattern.length > target.length
+      ? []
+      : search(
+        pattern,
+        target,
+        maybeRefined,
+        0
+      )
+}
+
 export const allIsomorphismsForDigraphs = (
   pattern: DiGraph,
   target: DiGraph,
@@ -223,19 +246,9 @@ export const allIsomorphismsForDigraphs = (
   const weightedPattern = digraphToWeighted(pattern)
   const weightedTarget = digraphToWeighted(target)
 
-  const maybeRefined = degreeRefine(
+  return allIsomorphismsForWeightedDigraphs(
     weightedPattern,
     weightedTarget,
-    initialpossibleMappings || allMappings(pattern.length, target.length)
+    initialpossibleMappings
   )
-  return !maybeRefined
-    ? []
-    : pattern.length > target.length
-      ? []
-      : search(
-        weightedPattern,
-        weightedTarget,
-        maybeRefined,
-        0
-      )
 }
