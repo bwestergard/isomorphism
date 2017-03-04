@@ -24,6 +24,7 @@ reduce(concat, [], map(fn, xs))
 /* Adjacency list graph representation */
 
 const getIndex = ([index, weight]: WeightedEdge): number => index
+const getWeight = ([index, weight]: WeightedEdge): number => weight
 const weightOneEdge = (index: number): WeightedEdge => [index, 1]
 const digraphToWeighted = (graph: DiGraph): WeightedDiGraph => map(
   (neighbors) => map(
@@ -37,13 +38,14 @@ const digraphToWeighted = (graph: DiGraph): WeightedDiGraph => map(
 const isAdjacent = <T>(
   graph: Matrix<T>,
   accessIndex: (x: T) => number,
+  adjacencyPred: (edge: T, neighborIndex: number) => boolean,
   vertex: number,
   neighbor: number
 ): boolean =>
 {
   for (let i = 0; i < graph[vertex].length; i++) {
     if (accessIndex(graph[vertex][i]) > neighbor) return false // NOTE: adjacency list must be sorted ascending
-    if (accessIndex(graph[vertex][i]) === neighbor) return true
+    if (adjacencyPred(graph[vertex][i], neighbor)) return true
   }
   return false
 }
@@ -51,7 +53,7 @@ const isAdjacent = <T>(
 /* Ullman */
 
 export const extractAtMostOneIsomorphism = (
-  pattern:WeightedDiGraph,
+  pattern: WeightedDiGraph,
   target: WeightedDiGraph,
   mapping: Mapping
 ): Isomorphism[] => {
@@ -63,25 +65,27 @@ export const extractAtMostOneIsomorphism = (
   let iso: Isomorphism = []
 
   for (let patternVertex = 0; patternVertex < pattern.length; patternVertex++) {
-    let targetVertexForPatternVertex = mappedTargetVertex(patternVertex)
-    if (targetVertexForPatternVertex === null) return []
+    let correspondingTargetVertex = mappedTargetVertex(patternVertex)
+    if (correspondingTargetVertex === null) return []
     let patternVector = pattern[patternVertex]
     for (let j = 0; j < patternVector.length; j++) {
       let [patternNeighbor, patternNeighborEdgeWeight] = patternVector[j]
-      let maybeTarget = mappedTargetVertex(patternNeighbor)
+      let maybeTargetNeighbor = mappedTargetVertex(patternNeighbor)
       if (
-        maybeTarget === null ||
+        maybeTargetNeighbor === null ||
         !isAdjacent(
           target,
           getIndex,
-          targetVertexForPatternVertex,
-          maybeTarget
+          (edge, neighborIndex) =>
+            getIndex(edge) === neighborIndex && getWeight(edge) >= patternNeighborEdgeWeight,
+          correspondingTargetVertex,
+          maybeTargetNeighbor
         )
       ) {
         return []
       }
     }
-    iso.push(targetVertexForPatternVertex)
+    iso.push(correspondingTargetVertex)
   }
   return [iso]
 }
@@ -153,7 +157,13 @@ refine(
   mapping,
   (patternVertex: number, targetVertex: number): boolean => all(
     ([patternVertexNeighbor, patternVertexNeighborWeight]) => any(
-      ([targetVertexNeighbor, targetVertexNeighborWeight]) => isAdjacent(mapping, (x) => x, patternVertexNeighbor, targetVertexNeighbor),
+      ([targetVertexNeighbor, targetVertexNeighborWeight]) => isAdjacent(
+        mapping,
+        (x) => x,
+        (edge, neighborIndex) => edge === neighborIndex,
+        patternVertexNeighbor,
+        targetVertexNeighbor
+      ),
       target[targetVertex]
     ),
     pattern[patternVertex]
