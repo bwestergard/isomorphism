@@ -3,7 +3,7 @@
 
 import { clone } from 'ramda'
 import assert from 'assert'
-import { allIsomorphisms } from '../lib/index'
+import { allIsomorphismsForDigraphs, allIsomorphismsForWeightedDigraphs } from '../lib/index'
 
 declare class describe {
   static (description: string, spec: () => void): void;
@@ -15,11 +15,39 @@ declare class it {
 
 // TODO test for every error type
 
-describe('Isomorphism', function () {
+describe('Weighted', function () {
+
+  it('Three-cycle with one two-weighted edge has one isomorpism to a certain directed Hajos graph', function () {
+    assert.deepEqual(
+      allIsomorphismsForWeightedDigraphs(
+        [
+          [[1,200]],
+          [[2,1]],
+          [[0,1]]
+        ],
+        [
+          [[1,800]],
+          [[2,1],[3,1]],
+          [[0,1],[4,1]],
+          [[4,1]],
+          [[1,1],[5,1]],
+          [[2,1]]
+        ],
+        null
+      ),
+      [
+        [0,1,2]
+      ]
+    )
+  })
+
+})
+
+describe('Unweighted', function () {
 
   it('a -> b has only one isomorphism to a -> b', function () {
     assert.deepEqual(
-      allIsomorphisms(
+      allIsomorphismsForDigraphs(
         [
           [1],
           []
@@ -38,7 +66,7 @@ describe('Isomorphism', function () {
 
   it('Three-cycle isomorphic to every cycle', function () {
     assert.deepEqual(
-      allIsomorphisms(
+      allIsomorphismsForDigraphs(
         [
           [1],
           [2],
@@ -61,7 +89,7 @@ describe('Isomorphism', function () {
 
   it('Isomorphisms for three-chain pattern on ten-chain', function () {
     assert.deepEqual(
-      allIsomorphisms(
+      allIsomorphismsForDigraphs(
         [
           [1],
           [2],
@@ -96,7 +124,7 @@ describe('Isomorphism', function () {
 
   it('Isomorphisms for three-chain pattern on ten-cycle', function () {
     assert.deepEqual(
-      allIsomorphisms(
+      allIsomorphismsForDigraphs(
         [
           [1],
           [2],
@@ -135,7 +163,7 @@ describe('Isomorphism', function () {
 
   it('Pattern larger than graph produces no isomorphisms', function () {
     assert.deepEqual(
-      allIsomorphisms(
+      allIsomorphismsForDigraphs(
         [
           [1],
           [2],
@@ -162,7 +190,7 @@ describe('Isomorphism', function () {
 	// http://mathworld.wolfram.com/HajosGraph.html
   it('Three-cycle has twelve isomorpisms to a certain directed Hajos graph', function () {
     assert.deepEqual(
-      allIsomorphisms(
+      allIsomorphismsForDigraphs(
         [
           [1],
           [2],
