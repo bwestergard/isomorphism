@@ -286,4 +286,23 @@ describe('Unweighted', function () {
     )
   })
 
+  it('Self-reference in target graph does not match three-chain', function () {
+    assert.deepEqual(
+      allIsomorphismsForWeightedDigraphs(
+        [
+          [[1,1]],
+          [[2,1]],
+          []
+        ],
+        [
+          [],
+          [[1,1]],
+          []
+        ],
+        null
+      ),
+      []
+    )
+  })
+
 })
