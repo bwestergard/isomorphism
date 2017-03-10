@@ -267,4 +267,23 @@ describe('Unweighted', function () {
     )
   })
 
+  it('Self-reference in target graph does not match two-cycle', function () {
+    assert.deepEqual(
+      allIsomorphismsForWeightedDigraphs(
+        [
+          [[1,1]],
+          [[2,1]],
+          [[0,1]]
+        ],
+        [
+          [],
+          [[1,1]],
+          []
+        ],
+        null
+      ),
+      []
+    )
+  })
+
 })
