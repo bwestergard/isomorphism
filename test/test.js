@@ -3,7 +3,7 @@
 
 import { clone } from 'ramda'
 import assert from 'assert'
-import { allIsomorphismsForDigraphs, allIsomorphismsForWeightedDigraphs } from '../lib/index'
+import { allIsomorphismsForDigraphs, allIsomorphismsForWeightedDigraphs } from '../src/index'
 
 declare class describe {
   static (description: string, spec: () => void): void;
