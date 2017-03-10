@@ -41,6 +41,44 @@ describe('Weighted', function () {
     )
   })
 
+  it('Self-reference in target graph does not match three-cycle', function () {
+    assert.deepEqual(
+      allIsomorphismsForWeightedDigraphs(
+        [
+          [[1,1]],
+          [[2,1]],
+          [[0,1]]
+        ],
+        [
+          [],
+          [[1,1]],
+          []
+        ],
+        null
+      ),
+      []
+    )
+  })
+
+  it('Self-reference in target graph does not match three-chain', function () {
+    assert.deepEqual(
+      allIsomorphismsForWeightedDigraphs(
+        [
+          [[1,1]],
+          [[2,1]],
+          []
+        ],
+        [
+          [],
+          [[1,1]],
+          []
+        ],
+        null
+      ),
+      []
+    )
+  })
+
 })
 
 describe('Unweighted', function () {
@@ -219,6 +257,50 @@ describe('Unweighted', function () {
         [4,1,3],
         [4,5,2],
         [5,2,4]
+      ]
+    )
+  })
+
+  it('Isomorphisms for three-chain pattern on ten-cycle with orphans', function () {
+    assert.deepEqual(
+      allIsomorphismsForDigraphs(
+        [
+          [1],
+          [2],
+          []
+        ],
+        [
+          [],
+          [2],
+          [3],
+          [4],
+          [5],
+          [6],
+          [7],
+          [8],
+          [9],
+          [11],
+          [],
+          [1],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        null
+      ),
+      [
+        [1,2,3],
+        [2,3,4],
+        [3,4,5],
+        [4,5,6],
+        [5,6,7],
+        [6,7,8],
+        [7,8,9],
+        [8,9,11],
+        [9,11,1],
+        [11,1,2]
       ]
     )
   })

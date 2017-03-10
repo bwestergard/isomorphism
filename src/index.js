@@ -96,14 +96,25 @@ const setMappingInPossibleMappings = (
   patternVertex: number,
   targetVertex: number
 ) => {
+  const eliminatePossibility =
+  (targetVertex: number, row: RowVector<number>): RowVector<number> =>
+  filter(
+    (possibleTarget) => !(possibleTarget === targetVertex),
+    row
+  )
+
   let mapping = []
   for (let i = 0; i < possibleMappings.length; i++) {
     let possibleMappingsForPatternVertex = possibleMappings[i]
-    mapping.push(
-      i === patternVertex
-      ? [targetVertex]
-      : possibleMappingsForPatternVertex
-    )
+    if (i < patternVertex) {
+      mapping.push(possibleMappingsForPatternVertex)
+    } else if (i === patternVertex) {
+      mapping.push([targetVertex])
+    } else {
+      mapping.push(
+        eliminatePossibility(targetVertex, possibleMappingsForPatternVertex)
+      )
+    }
   }
   return mapping
 }
