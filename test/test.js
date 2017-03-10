@@ -267,7 +267,7 @@ describe('Unweighted', function () {
     )
   })
 
-  it('Self-reference in target graph does not match two-cycle', function () {
+  it('Self-reference in target graph does not match three-cycle', function () {
     assert.deepEqual(
       allIsomorphismsForWeightedDigraphs(
         [
