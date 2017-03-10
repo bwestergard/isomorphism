@@ -41,6 +41,44 @@ describe('Weighted', function () {
     )
   })
 
+  it('Self-reference in target graph does not match three-cycle', function () {
+    assert.deepEqual(
+      allIsomorphismsForWeightedDigraphs(
+        [
+          [[1,1]],
+          [[2,1]],
+          [[0,1]]
+        ],
+        [
+          [],
+          [[1,1]],
+          []
+        ],
+        null
+      ),
+      []
+    )
+  })
+
+  it('Self-reference in target graph does not match three-chain', function () {
+    assert.deepEqual(
+      allIsomorphismsForWeightedDigraphs(
+        [
+          [[1,1]],
+          [[2,1]],
+          []
+        ],
+        [
+          [],
+          [[1,1]],
+          []
+        ],
+        null
+      ),
+      []
+    )
+  })
+
 })
 
 describe('Unweighted', function () {
@@ -264,44 +302,6 @@ describe('Unweighted', function () {
         [9,11,1],
         [11,1,2]
       ]
-    )
-  })
-
-  it('Self-reference in target graph does not match three-cycle', function () {
-    assert.deepEqual(
-      allIsomorphismsForWeightedDigraphs(
-        [
-          [[1,1]],
-          [[2,1]],
-          [[0,1]]
-        ],
-        [
-          [],
-          [[1,1]],
-          []
-        ],
-        null
-      ),
-      []
-    )
-  })
-
-  it('Self-reference in target graph does not match three-chain', function () {
-    assert.deepEqual(
-      allIsomorphismsForWeightedDigraphs(
-        [
-          [[1,1]],
-          [[2,1]],
-          []
-        ],
-        [
-          [],
-          [[1,1]],
-          []
-        ],
-        null
-      ),
-      []
     )
   })
 
