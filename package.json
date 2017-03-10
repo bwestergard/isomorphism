@@ -1,6 +1,6 @@
 {
   "name": "isomorphism",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Find subgraph isomorphisms with Ullman's 1976 algorithm.",
   "main": "lib/index.js",
   "scripts": {
